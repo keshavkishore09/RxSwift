@@ -41,6 +41,56 @@ observables4.subscribe(onNext: { element in
 })
 
 // No need to unwrap the element
-observables3.subscribe(onNext: { element in
+let subscription1 =  observables3.subscribe(onNext: { element in
     print(element)
 })
+
+
+// Dispose the subscription
+subscription1.dispose()
+
+
+
+
+// Use dispose bag to dispose
+let disposeBag = DisposeBag()
+
+Observable.of("A", "B", "C").subscribe {
+    print($0)
+}.disposed(by: disposeBag)
+
+
+
+// Use create function to create the observable
+Observable<String>.create { observer in
+    observer.onNext("A")
+    observer.onCompleted()
+    observer.onNext("B") // B will never get called as it is written after
+    return Disposables.create()
+}.subscribe(onNext: {print($0)}, onError: {print($0)}, onCompleted: {print("Completed")}, onDisposed: {print("Disposed")}).disposed(by: disposeBag)
+
+
+/*********/
+
+// Publish Subject
+
+let subject = PublishSubject<String>()
+
+subject.onNext("Issue 1")
+subject.onNext("Issue 2")
+subject.subscribe{
+     event in
+    print(event)
+}
+
+subject.onNext("Issue 2")
+subject.onNext("Issue 3")
+
+// subject.dispose()
+
+subject.onCompleted()
+subject.onNext("Issue 4")
+
+/*****/
+    
+
