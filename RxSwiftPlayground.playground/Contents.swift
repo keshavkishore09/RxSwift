@@ -111,3 +111,35 @@ behaviorSubject.subscribe { event in
 behaviorSubject.onNext("Issue 1")
 
 /*******/
+
+
+
+
+print("\n ############")
+
+/*****************/
+let replaySubject = ReplaySubject<String>.create(bufferSize: 2)
+
+replaySubject.onNext("Replay Subjuct Issue 1")
+replaySubject.onNext("Replay Subject Issue 2")
+replaySubject.onNext("Replay Subject Issue 3")
+
+
+replaySubject.subscribe { event in
+     print(event)
+}
+
+
+replaySubject.onNext("Replay Subject Issue 4")
+replaySubject.onNext("Replay Subject Issue 5")
+replaySubject.onNext("Replay Subject Issue 6")
+
+
+print("[Subscription 2]")
+replaySubject.subscribe {
+    print($0)
+}
+
+
+
+/********************/
