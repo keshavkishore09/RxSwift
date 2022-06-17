@@ -1,5 +1,6 @@
 import UIKit
 import RxSwift
+import RxCocoa
 
 
 
@@ -70,6 +71,9 @@ Observable<String>.create { observer in
 }.subscribe(onNext: {print($0)}, onError: {print($0)}, onCompleted: {print("Completed")}, onDisposed: {print("Disposed")}).disposed(by: disposeBag)
 
 
+
+print("\n #######----PublishSubect---#####")
+
 /*********/
 
 // Publish Subject
@@ -94,7 +98,7 @@ subject.onNext("Issue 5")
 /*****/
     
 
-print("##############")
+print("\n ##############--- BehaviorSubject---######")
 
 /******/
 
@@ -115,7 +119,7 @@ behaviorSubject.onNext("Issue 1")
 
 
 
-print("\n ############")
+print("\n ############--- Realy Subject---########")
 
 /*****************/
 let replaySubject = ReplaySubject<String>.create(bufferSize: 2)
@@ -140,6 +144,53 @@ replaySubject.subscribe {
     print($0)
 }
 
-
-
 /********************/
+
+
+
+
+/******/
+
+// It is deprecated
+// let variable = Variable("Initial Value")
+// variable.value = "Hello world"
+
+// variable.asObservable().subscribe{print($0)}
+/******/
+
+
+
+print("\n ##########----Behaviour Relay----#########")
+
+
+/*******/
+// Alternative of variable
+
+let behaviorRelay =  BehaviorRelay(value: "Inital Value")
+
+behaviorRelay.asObservable().subscribe {
+    print($0)
+}
+
+// behaviorRelay.value = "hello" // Value is read-only(Uncomment it to get the error)
+behaviorRelay.accept("Hello World")
+
+
+print("\nAnother behavior relay")
+
+let behaviorRelay2 = BehaviorRelay(value: ["Item 1"])
+var value = behaviorRelay2.value
+
+value.append("Item 2")
+value.append("Item 3")
+value.append("Item 4")
+
+behaviorRelay2.accept(value)
+// behaviorRelay2.accept(behaviorRelay2.value + ["Item 5"] )
+behaviorRelay2.asObservable().subscribe {
+    print($0)
+}
+
+
+
+/******/
