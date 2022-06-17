@@ -83,14 +83,31 @@ subject.subscribe{
     print(event)
 }
 
-subject.onNext("Issue 2")
 subject.onNext("Issue 3")
+subject.onNext("Issue 4")
 
 // subject.dispose()
 
 subject.onCompleted()
-subject.onNext("Issue 4")
+subject.onNext("Issue 5")
 
 /*****/
     
 
+print("##############")
+
+/******/
+
+let behaviorSubject = BehaviorSubject(value: "Initial Value")
+
+
+behaviorSubject.onNext("Last Issue")
+
+behaviorSubject.subscribe { event in
+    print("Hello")
+    print(event.element)
+}
+
+behaviorSubject.onNext("Issue 1")
+
+/*******/
