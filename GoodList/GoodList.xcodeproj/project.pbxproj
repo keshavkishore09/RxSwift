@@ -13,6 +13,7 @@
 		AB62CEC9285F8A6A00C5ACF0 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = AB62CEC8285F8A6A00C5ACF0 /* Assets.xcassets */; };
 		AB62CECC285F8A6A00C5ACF0 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = AB62CECA285F8A6A00C5ACF0 /* LaunchScreen.storyboard */; };
 		AB62CED5285F8AA800C5ACF0 /* TaskListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB62CED4285F8AA800C5ACF0 /* TaskListViewController.swift */; };
+		AB62CED7285FEE2300C5ACF0 /* AddTaskViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB62CED6285FEE2300C5ACF0 /* AddTaskViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -24,6 +25,7 @@
 		AB62CECB285F8A6A00C5ACF0 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		AB62CECD285F8A6A00C5ACF0 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		AB62CED4285F8AA800C5ACF0 /* TaskListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaskListViewController.swift; sourceTree = "<group>"; };
+		AB62CED6285FEE2300C5ACF0 /* AddTaskViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddTaskViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -63,6 +65,7 @@
 				AB62CEC8285F8A6A00C5ACF0 /* Assets.xcassets */,
 				AB62CECA285F8A6A00C5ACF0 /* LaunchScreen.storyboard */,
 				AB62CECD285F8A6A00C5ACF0 /* Info.plist */,
+				AB62CED6285FEE2300C5ACF0 /* AddTaskViewController.swift */,
 			);
 			path = GoodList;
 			sourceTree = "<group>";
@@ -147,6 +150,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				AB62CEC0285F8A6900C5ACF0 /* AppDelegate.swift in Sources */,
+				AB62CED7285FEE2300C5ACF0 /* AddTaskViewController.swift in Sources */,
 				AB62CEC2285F8A6900C5ACF0 /* SceneDelegate.swift in Sources */,
 				AB62CED5285F8AA800C5ACF0 /* TaskListViewController.swift in Sources */,
 			);

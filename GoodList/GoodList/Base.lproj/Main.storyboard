@@ -59,7 +59,13 @@
                             <constraint firstItem="QVg-3M-OXu" firstAttribute="top" secondItem="eme-io-wHq" secondAttribute="bottom" constant="10" id="umE-5N-1i3"/>
                         </constraints>
                     </view>
-                    <navigationItem key="navigationItem" title="Good List" id="ICN-UW-LKr"/>
+                    <navigationItem key="navigationItem" title="Good List" id="ICN-UW-LKr">
+                        <barButtonItem key="rightBarButtonItem" systemItem="add" id="s9u-Fe-AHB">
+                            <connections>
+                                <segue destination="0gx-b1-8YA" kind="presentation" id="vAa-2G-NZd"/>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
                     <connections>
                         <outlet property="prioritySegmentedControl" destination="eme-io-wHq" id="4lm-ZP-kGI"/>
                         <outlet property="tableView" destination="QVg-3M-OXu" id="mYb-Qv-oju"/>
@@ -68,6 +74,49 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="762" y="80"/>
+        </scene>
+        <!--Add Task-->
+        <scene sceneID="3Gy-hw-nzg">
+            <objects>
+                <viewController id="cl2-cK-kHM" customClass="AddTaskViewController" customModule="GoodList" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="J4E-vg-336">
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="842"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="aPG-nf-hoq">
+                                <rect key="frame" x="104" y="80" width="206" height="32"/>
+                                <segments>
+                                    <segment title="High"/>
+                                    <segment title="Medium"/>
+                                    <segment title="Low"/>
+                                </segments>
+                            </segmentedControl>
+                            <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="lln-ON-LMx">
+                                <rect key="frame" x="107" y="404" width="200" height="34"/>
+                                <color key="backgroundColor" systemColor="quaternaryLabelColor"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="200" id="Q2W-28-gUl"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                <textInputTraits key="textInputTraits"/>
+                            </textField>
+                        </subviews>
+                        <viewLayoutGuide key="safeArea" id="hgI-xY-SqX"/>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                        <constraints>
+                            <constraint firstItem="lln-ON-LMx" firstAttribute="centerX" secondItem="J4E-vg-336" secondAttribute="centerX" id="9n1-z1-bha"/>
+                            <constraint firstItem="aPG-nf-hoq" firstAttribute="top" secondItem="hgI-xY-SqX" secondAttribute="top" constant="24" id="IFi-Ir-rbn"/>
+                            <constraint firstItem="aPG-nf-hoq" firstAttribute="centerX" secondItem="J4E-vg-336" secondAttribute="centerX" id="bAH-3d-P9S"/>
+                            <constraint firstItem="lln-ON-LMx" firstAttribute="centerY" secondItem="J4E-vg-336" secondAttribute="centerY" id="zm2-cb-hRM"/>
+                        </constraints>
+                    </view>
+                    <navigationItem key="navigationItem" title="Add Task" id="CIm-Cs-dqZ">
+                        <barButtonItem key="rightBarButtonItem" systemItem="save" id="mji-H5-b3V"/>
+                    </navigationItem>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="Lh0-j2-HXN" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="2447.826086956522" y="85.714285714285708"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="gja-hV-uir">
@@ -87,8 +136,29 @@
             </objects>
             <point key="canvasLocation" x="-78.260869565217391" y="79.6875"/>
         </scene>
+        <!--Navigation Controller-->
+        <scene sceneID="WlY-wg-Kur">
+            <objects>
+                <navigationController automaticallyAdjustsScrollViewInsets="NO" id="0gx-b1-8YA" sceneMemberID="viewController">
+                    <toolbarItems/>
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="KQ3-HS-cXH">
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="56"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </navigationBar>
+                    <nil name="viewControllers"/>
+                    <connections>
+                        <segue destination="cl2-cK-kHM" kind="relationship" relationship="rootViewController" id="i6g-Hs-9nb"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="t4f-jy-zRj" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1537.68115942029" y="85.714285714285708"/>
+        </scene>
     </scenes>
     <resources>
+        <systemColor name="quaternaryLabelColor">
+            <color red="0.23529411764705882" green="0.23529411764705882" blue="0.2627450980392157" alpha="0.17999999999999999" colorSpace="custom" customColorSpace="sRGB"/>
+        </systemColor>
         <systemColor name="systemBackgroundColor">
             <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
         </systemColor>
