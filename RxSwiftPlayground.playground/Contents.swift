@@ -82,7 +82,7 @@ let subject = PublishSubject<String>()
 
 subject.onNext("Issue 1")
 subject.onNext("Issue 2")
-subject.subscribe{
+subject.asObservable().subscribe {
      event in
     print(event)
 }
@@ -119,7 +119,7 @@ behaviorSubject.onNext("Issue 1")
 
 
 
-print("\n ############--- Realy Subject---########")
+print("\n ############--- Realy Subject ---########")
 
 /*****************/
 let replaySubject = ReplaySubject<String>.create(bufferSize: 2)
@@ -191,6 +191,158 @@ behaviorRelay2.asObservable().subscribe {
     print($0)
 }
 
-
-
 /******/
+
+
+
+
+
+print("\n########-------Filtering Operators(Ignore Element)----##########")
+
+/*****************/
+
+
+// Ignore elments subscribe function is called only at the completion of the event and not on other emiitence.
+
+
+let strikesIgnoreElement = PublishSubject<String>()
+
+strikesIgnoreElement.ignoreElements().subscribe { _ in
+    print("[Subscription is called]") // Only on oncompleted
+}.disposed(by: disposeBag)
+
+
+
+strikesIgnoreElement.onNext("A")
+strikesIgnoreElement.onNext("B")
+strikesIgnoreElement.onNext("C")
+
+strikesIgnoreElement.onCompleted()
+
+/****************/
+
+
+
+
+print("\n#######--Filtering Operator(Element at)-----#####")
+
+/*******/
+
+let strikesElementAt = PublishSubject<String>()
+
+strikesElementAt.element(at: 2).subscribe(onNext:{print($0)}).disposed(by: disposeBag) // gets print if the 2nd index value exist
+
+strikesElementAt.onNext("X")
+strikesElementAt.onNext("Y")
+strikesElementAt.onNext("Z")
+strikesElementAt.onNext("A'")
+
+/*********/
+
+
+
+
+print("\n#######--Filtering Operator(FIlter)-----#####")
+
+/*******/
+
+Observable.of(1,2,3,4,5,6,7).filter {
+    $0 % 2 == 0
+}.subscribe(onNext: {print($0)}).disposed(by: disposeBag) // Only prints 2,4,6
+
+/*********/
+
+
+
+
+
+print("\n#######--Filtering Operator(Skip)-----#####")
+
+/*******/
+
+Observable.of("A", "B", "C", "D", "E", "F").skip(3).subscribe(onNext: {print($0)}).disposed(by: disposeBag) // Skips first 3 element
+
+/*********/
+
+
+
+
+print("\n#######--Filtering Operator(Skip While)-----#####")
+
+/*******/
+
+Observable.of(2,2,3,4,4).skip(while: { $0 % 2 == 0
+}).subscribe(onNext: {print($0)}).disposed(by: disposeBag) // When first condition is met false in skip while paramater, it print all the events from there.
+
+/*********/
+
+
+
+
+print("\n#######--Filtering Operator(Skip Until)-----#####")
+
+/*******/
+
+
+let skipUntilSubject = PublishSubject<String>()
+let trigger = PublishSubject<String>()
+
+
+skipUntilSubject.skip(until: trigger).subscribe(onNext: {print($0)}).disposed(by: disposeBag)// Skip until trigger is not called.
+skipUntilSubject.onNext("A")
+skipUntilSubject.onNext("B")
+
+
+trigger.onNext("B")
+skipUntilSubject.onNext("C")
+
+
+
+/*********/
+
+
+
+
+print("\n#######--Filtering Operator(Take)-----#####")
+
+/*******/
+
+Observable.of(1,2,3,4,5,6).take(3).subscribe(onNext: {print($0)}).disposed(by: disposeBag) // First 3 elements only
+
+/*********/
+
+
+
+print("\n#######--Filtering Operator(Take While)-----#####")
+
+/*******/
+
+Observable.of(2,4,6,7,8,10).take(while: { $0 % 2 == 0
+}).subscribe(onNext: {print($0)}).disposed(by: disposeBag) // Till the time condition is met and ignores all after once it is met false afterwards.
+
+/*********/
+
+
+
+print("\n#######--Filtering Operator(Take Until)-----#####")
+
+/*******/
+
+
+let takeUntilSubject = PublishSubject<String>()
+let takeUntilTrigger = PublishSubject<String>()
+
+takeUntilSubject.take(until: takeUntilTrigger).subscribe(onNext: {print($0)}).disposed(by: disposeBag)
+
+takeUntilSubject.onNext("2")
+takeUntilSubject.onNext("3")
+takeUntilSubject.onNext("4")
+
+
+takeUntilTrigger.onNext("4")
+takeUntilTrigger.onNext("5")
+
+
+
+takeUntilSubject.onNext("6")
+/*********/
