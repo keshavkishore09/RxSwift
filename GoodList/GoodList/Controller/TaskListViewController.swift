@@ -7,6 +7,7 @@
 
 import UIKit
 import RxSwift
+import RxCocoa
 
 
 
@@ -15,6 +16,7 @@ class TaskListVieweController: UIViewController {
     @IBOutlet weak var prioritySegmentedControl: UISegmentedControl!
     @IBOutlet weak var tableView: UITableView!
     let disposeBag = DisposeBag()
+    let behvaiorRelay = BehaviorRelay<[Task]>(value: [])
     
     
     override func viewDidLoad() {
@@ -27,7 +29,10 @@ class TaskListVieweController: UIViewController {
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         guard let navVC = segue.destination as? UINavigationController, let controller = navVC.viewControllers.first as? AddTaskViewController else {return}
         controller.taskObservable.subscribe(onNext: { task in
-            print(task)
+            let priority = Priority(rawValue: self.prioritySegmentedControl.selectedSegmentIndex -1)
+            var exisitingTask = self.behvaiorRelay.value
+            exisitingTask.append(task)
+            self.behvaiorRelay.accept(exisitingTask)
         }).disposed(by: disposeBag)
     }
 }
@@ -41,7 +46,7 @@ extension TaskListVieweController: UITableViewDataSource {
     
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 10
+        return behvaiorRelay.value.count
     }
 }
 

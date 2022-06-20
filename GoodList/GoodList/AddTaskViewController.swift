@@ -11,6 +11,7 @@ import RxSwift
 class AddTaskViewController: UIViewController {
     private let taskSubject = PublishSubject<Task>()
     
+    
     var taskObservable: Observable<Task> {
         return taskSubject.asObservable()
     }
