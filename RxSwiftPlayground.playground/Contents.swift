@@ -176,7 +176,7 @@ behaviorRelay.asObservable().subscribe {
 behaviorRelay.accept("Hello World")
 
 
-print("\nAnother behavior relay")
+print("\n Another behavior relay")
 
 let behaviorRelay2 = BehaviorRelay(value: ["Item 1"])
 var value = behaviorRelay2.value
@@ -346,3 +346,82 @@ takeUntilTrigger.onNext("5")
 
 takeUntilSubject.onNext("6")
 /*********/
+
+
+
+print("\n #####----- Transform Operator(To array)-----#####")
+// Transform operator
+Observable.of(1,2,3,4,5).toArray().subscribe({print($0)}).disposed(by: disposeBag)
+
+
+
+
+print("\n #####----- Transform Operator(Map)-----#####")
+
+Observable.of(2,4,6,5,7,8).map {return $0 * 2 }.subscribe(onNext: {print($0)}).disposed(by: disposeBag)
+
+
+
+print("\n#####----- Transform Operator(Flat Map)-----#####")
+
+struct Student {
+    var score: BehaviorRelay<Int>
+}
+
+
+let john = Student(score: BehaviorRelay(value: 90))
+let mary = Student(score: BehaviorRelay(value: 100))
+
+
+
+let student = PublishSubject<Student>()
+
+student.asObservable().flatMap {$0.score.asObservable()}.subscribe({print($0)}).disposed(by: disposeBag)
+
+
+student.onNext(john)
+john.score.accept(100)
+
+
+student.onNext(mary) // No matter mary got emiited
+mary.score.accept(85) // John will be still observed
+
+
+john.score.accept(33)
+
+
+
+
+
+
+print("\n#####----- Transform Operator(Flat Map Latest)-----#####")
+
+
+
+struct Student1 {
+    var score: BehaviorRelay<Int>
+}
+
+
+
+let john1 = Student(score: BehaviorRelay(value: 90))
+let mary1 = Student(score: BehaviorRelay(value: 75))
+
+
+
+let student1 = PublishSubject<Student>()
+
+student1.asObservable().flatMapLatest {$0.score.asObservable()}.subscribe({print($0)}).disposed(by: disposeBag)
+
+
+student1.onNext(john1) // John emitted and observed
+john1.score.accept(100) // John will be observed
+
+
+student1.onNext(mary1) // Mary will be emitted and observed
+john1.score.accept(200) // 	This will never gets called after mary1 got emitted
+mary1.score.accept(20)
+mary1.score.accept(25)
+
+
+

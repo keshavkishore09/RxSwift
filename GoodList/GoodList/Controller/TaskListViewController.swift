@@ -16,7 +16,7 @@ class TaskListVieweController: UIViewController {
     @IBOutlet weak var prioritySegmentedControl: UISegmentedControl!
     @IBOutlet weak var tableView: UITableView!
     let disposeBag = DisposeBag()
-    let behvaiorRelay = BehaviorRelay<[Task]>(value: [])
+    let behaviorRelay = BehaviorRelay<[Task]>(value: [])
     private var filteredTask = [Task]()
     
     
@@ -29,24 +29,39 @@ class TaskListVieweController: UIViewController {
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         guard let navVC = segue.destination as? UINavigationController, let controller = navVC.viewControllers.first as? AddTaskViewController else {return}
-        controller.taskObservable.subscribe(onNext: { task in
+        controller.taskObservable.subscribe(onNext: { [unowned self] task in
             let priority = Priority(rawValue: self.prioritySegmentedControl.selectedSegmentIndex - 1)
-            var exisitingTask = self.behvaiorRelay.value
+            var exisitingTask = self.behaviorRelay.value
             exisitingTask.append(task)
-            self.behvaiorRelay.accept(exisitingTask)
+            self.behaviorRelay.accept(exisitingTask)
+            self.filterTask(by: priority)
         }).disposed(by: disposeBag)
     }
     
     
+    @IBAction func selectedSegment(selectedSegment: UISegmentedControl){
+        let priority = Priority(rawValue: selectedSegment.selectedSegmentIndex - 1)
+        filterTask(by: priority)
+    }
+    
+    
+    private func updateTableView() {
+        DispatchQueue.main.async {
+            self.tableView.reloadData()
+        }
+    }
+    
     private func filterTask(by priority: Priority?) {
         if priority == nil {
-            self.filteredTask = self.behvaiorRelay.value
+            self.filteredTask = self.behaviorRelay.value
+            self.updateTableView()
         } else {
-            self.behvaiorRelay.map { task  in
-                return self.behvaiorRelay.filter { $0.priority  == priority}
-            }.subscribe(onNext: { tasks in
-                self.filteredTask = tasks
-            })
+                self.behaviorRelay.map {tasks in
+                return tasks.filter {$0.priority == priority!}
+            }.subscribe(onNext:{ [weak self] tasks in
+                self?.filteredTask = tasks
+                self?.updateTableView()
+            }).disposed(by: disposeBag)
         }
     }
 }
@@ -60,7 +75,7 @@ extension TaskListVieweController: UITableViewDataSource {
     
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return behvaiorRelay.value.count
+        return filteredTask.count
     }
 }
 
@@ -68,6 +83,9 @@ extension TaskListVieweController: UITableViewDataSource {
 extension TaskListVieweController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "TaskTableViewCell", for: indexPath)
+        
+        cell.textLabel?.text = self.filteredTask[indexPath.row].title
         return cell
+        
     }
 }
