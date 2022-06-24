@@ -425,3 +425,124 @@ mary1.score.accept(25)
 
 
 
+
+
+print("\n ######---------Combining Operator(Startw with) ########----------")
+
+
+let numbers = Observable.of(2,3,4)
+let observable = numbers.startWith(1)
+observable.subscribe(onNext:{ print($0)}).disposed(by: disposeBag)
+
+
+
+print("\n ######---------Combining Operator(Concat) ########----------")
+
+let concat1 = Observable.of(1,2,3,4)
+let concat2 = Observable.of(4,5,6,7)
+
+let concatObservables = Observable.concat([concat1, concat2])
+concatObservables.subscribe(onNext: {print($0)}).disposed(by: disposeBag)
+
+
+
+print("\n ######---------Combining Operator(Merge) ########----------")
+
+
+
+let left = PublishSubject<Int>()
+let right = PublishSubject<Int>()
+
+let source = Observable.of(left.asObservable(), right.asObservable())
+
+let mergeObservable = source.merge()
+mergeObservable.subscribe(onNext:{print($0)}).disposed(by: disposeBag)
+left.onNext(5)
+left.onNext(7)
+right.onNext(3)
+right.onNext(10)
+left.onNext(100)
+
+
+
+print("\n ######---------Combining Operator(Combine Latest) ########----------")
+
+let combineLeft = PublishSubject<Int>()
+let combineRight = PublishSubject<Int>()
+
+let observableCombine = Observable.combineLatest(combineLeft, combineRight) { lastCombineLeft, lastCombineRight in
+    "\(lastCombineLeft) \(lastCombineRight)"
+}
+
+
+let subscriptionCombineLatest = observableCombine.subscribe(onNext: {print($0)}).disposed(by: disposeBag)
+
+combineLeft.onNext(45)
+combineRight.onNext(1)
+combineLeft.onNext(30)
+
+combineRight.onNext(2)
+combineRight.onNext(4)
+
+
+/*It will create a pair of combine the latest left and latest right*/
+
+
+print("\n ######---------Combining Operator(With Latest From) ########----------")
+
+
+let button = PublishSubject<Void>()
+let  textField = PublishSubject<String>()
+
+
+let latestFormObservable = button.withLatestFrom(textField)
+let latestFormSubscription = latestFormObservable.subscribe(onNext:{print($0)}).disposed(by: disposeBag)
+
+
+textField.onNext("SW")
+textField.onNext("If")
+textField.onNext("Swift")
+textField.onNext("Swift Rocks")
+
+
+button.onNext(())
+button.onNext(())
+
+
+/*In this the latest textfield value gets fetched when ever the button is clicked*/
+
+
+
+
+print("\n ######---------Combining Operator(Reduce Operator) ########----------")
+
+let sourceReduceOperator = Observable.of(1,2,3,4)
+sourceReduceOperator.reduce(0, accumulator: +).subscribe(onNext: {print($0)}).disposed(by: disposeBag)
+
+/*It will add the sequence and provide the one value*/
+
+
+
+// Another way of writing the reduce operator
+sourceReduceOperator.reduce(0, accumulator: {
+    summary, newValue in
+    return summary + newValue
+}).subscribe(onNext: {print($0)}).disposed(by: disposeBag)
+
+
+
+
+print("\n ######---------Combining Operator(Scan Operator) ########----------")
+
+let sourceScanOperator = Observable.of(1,2,3,4,5,6)
+sourceScanOperator.scan(0, accumulator: +).subscribe(onNext: {print($0)}).disposed(by: disposeBag)
+
+
+/*It will add the next elements to the last latest sum of the elements*/
+
+
+// Another way of writing the scan operator
+sourceScanOperator.scan(0, accumulator: {
+    summary, newValue in
+    return summary + newValue
+}).subscribe(onNext: {print($0)}).disposed(by: disposeBag)
