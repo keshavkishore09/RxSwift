@@ -27,6 +27,7 @@ extension URLRequest {
             do {
               return try JSONDecoder().decode(T.self, from: data)
             } catch {
+                print("Error in fetchong the data\(error)")
             return  nil
             }
         }.asObservable()
