@@ -20,7 +20,10 @@ class ViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.cityNameTextField.rx.value.subscribe (onNext: { city in
+        
+        
+        
+        self.cityNameTextField.rx.controlEvent(.editingDidEndOnExit).asObservable().map { self.cityNameTextField.text}.subscribe(onNext: {city in
             if let city =  city {
                 if city.isEmpty {
                     self.displayWeather(nil)
