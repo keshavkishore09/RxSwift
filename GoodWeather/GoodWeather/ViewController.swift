@@ -42,9 +42,16 @@ class ViewController: UIViewController {
               let url = URL.urlForWeatherAPICity(city: cityEncoded) else {return}
         
         let resource = Resource<WeatherResult>(url: url)
-        let search = URLRequest.load(resource: resource).observe(on: MainScheduler.instance).asDriver(onErrorJustReturn: WeatherResult.empty)
-        search.map{"\(String(describing: $0!.main.temp)) ℉"}.drive(self.temperatureLabel.rx.text).disposed(by: disposeBag)
-        search.map({"\(String(describing: $0!.main.humidity)) 💦"}).drive(self.humidityLabel.rx.text).disposed(by: disposeBag)
+       /*
+        let search = URLRequest.load(resource: resource).observe(on: MainScheduler.instance).asDriver(onErrorJustReturn: WeatherResult.empty) */
+        
+        let search = URLRequest.load(resource: resource).observe(on: MainScheduler.instance).catchError { error in
+            print(error)
+            return Observable.just(WeatherResult.empty)
+        }.asDriver(onErrorJustReturn: WeatherResult.empty)
+        search.map{"\(String(describing: $0.main.temp)) ℉"}.drive(self.temperatureLabel.rx.text).disposed(by: disposeBag)
+        search.map({"\(String(describing: $0.main.humidity)) 💦"}).drive(self.humidityLabel.rx.text).disposed(by: disposeBag)
+        
     }
     
     
