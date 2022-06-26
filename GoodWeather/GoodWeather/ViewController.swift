@@ -45,7 +45,7 @@ class ViewController: UIViewController {
        /*
         let search = URLRequest.load(resource: resource).observe(on: MainScheduler.instance).asDriver(onErrorJustReturn: WeatherResult.empty) */
         
-        let search = URLRequest.load(resource: resource).observe(on: MainScheduler.instance).catchError { error in
+        let search = URLRequest.load(resource: resource).observe(on: MainScheduler.instance).retry(3).catch { error in
             print(error)
             return Observable.just(WeatherResult.empty)
         }.asDriver(onErrorJustReturn: WeatherResult.empty)
